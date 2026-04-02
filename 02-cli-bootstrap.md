@@ -700,7 +700,7 @@ Agent 已经睁开了眼睛。现在，它要开始思考了。
 
 ---
 
-*下一章：[系统提示的构建——Agent 的世界观从哪里来](./03-system-prompt.md)*
+*下一章：[第三章：工具系统——赋予 Agent 改变世界的能力](./03-tool-system.md)*
 
 ```mermaid
 mindmap
