@@ -110,28 +110,28 @@ export type ToolPermissionContext = {
 
 ```mermaid
 stateDiagram-v2
-    [*] --> default: 会话启动
+    [*] --> DefaultMode: 会话启动
 
-    default --> acceptEdits: 用户开启"自动接受编辑"
-    default --> plan: 进入规划模式\n(保存 prePlanMode)
-    default --> bypassPermissions: CI/CD 启动参数\n⚠️ 高风险，标红色
-    default --> dontAsk: 非交互式场景
+    DefaultMode --> acceptEdits: 用户开启自动接受编辑
+    DefaultMode --> plan: 进入规划模式 保存 prePlanMode
+    DefaultMode --> bypassPermissions: CI/CD 启动参数 高风险标红色
+    DefaultMode --> dontAsk: 非交互式场景
 
-    acceptEdits --> default: 关闭自动接受
+    acceptEdits --> DefaultMode: 关闭自动接受
     acceptEdits --> plan: 进入规划模式
 
-    plan --> default: 退出规划模式\n(还原 prePlanMode)
-    plan --> acceptEdits: 退出到 acceptEdits\n(prePlanMode=acceptEdits)
+    plan --> DefaultMode: 退出规划模式 还原 prePlanMode
+    plan --> acceptEdits: 退出到 acceptEdits prePlanMode=acceptEdits
 
-    bypassPermissions --> default: 重置权限模式
+    bypassPermissions --> DefaultMode: 重置权限模式
 
-    dontAsk --> default: 恢复交互式
+    dontAsk --> DefaultMode: 恢复交互式
 
-    default --> auto: 启用 TRANSCRIPT_CLASSIFIER\nAI 自动判定
+    DefaultMode --> auto: 启用 TRANSCRIPT_CLASSIFIER AI 自动判定
 
-    note right of bypassPermissions: 绕过所有权限检查\nhooks 仍然执行
-    note right of plan: 只读操作\n禁止写入
-    note right of dontAsk: ask → deny\n完全非交互
+    note right of bypassPermissions: 绕过所有权限检查 hooks 仍然执行
+    note right of plan: 只读操作 禁止写入
+    note right of dontAsk: ask 转 deny 完全非交互
 ```
 
 ---
