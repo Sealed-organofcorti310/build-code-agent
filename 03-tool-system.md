@@ -412,25 +412,25 @@ const ASSISTANT_BLOCKING_BUDGET_MS = 15_000
 
 ```mermaid
 flowchart TD
-    Input[用户输入命令\ne.g. rm -rf /tmp/foo] --> Parse[parseForSecurity\n解析命令 AST]
-    Parse --> Pipes{有管道符?}
-    Pipes -->|是| AllParts[拆分所有管道片段\n逐一分析]
-    Pipes -->|否| Single[分析单条命令]
-    AllParts --> ReadCheck{所有片段\n都是只读命令?}
+    Input["用户输入命令<br/>e.g. rm -rf /tmp/foo"] --> Parse["parseForSecurity<br/>解析命令 AST"]
+    Parse --> Pipes{"有管道符?"}
+    Pipes -->|是| AllParts["拆分所有管道片段<br/>逐一分析"]
+    Pipes -->|否| Single["分析单条命令"]
+    AllParts --> ReadCheck{"所有片段<br/>都是只读命令?"}
     Single --> ReadCheck
-    ReadCheck -->|是\ncat/grep/ls...| IsReadOnly[标记 isReadOnly=true\nisConcurrencySafe=true]
-    ReadCheck -->|否| IsWrite[标记 isReadOnly=false]
+    ReadCheck -->|"是<br/>cat/grep/ls..."| IsReadOnly["标记 isReadOnly=true<br/>isConcurrencySafe=true"]
+    ReadCheck -->|否| IsWrite["标记 isReadOnly=false"]
 
-    IsReadOnly --> PermCheck[checkPermissions]
+    IsReadOnly --> PermCheck["checkPermissions"]
     IsWrite --> PermCheck
 
-    PermCheck --> RuleMatch{匹配用户配置规则?\ne.g. Bash(git *)}
-    RuleMatch -->|命中规则 allow| Allow[直接执行]
-    RuleMatch -->|命中规则 deny| Deny[拒绝执行]
-    RuleMatch -->|无匹配规则| AutoMode{auto 模式?}
+    PermCheck --> RuleMatch{"匹配用户配置规则?<br/>e.g. Bash git *"}
+    RuleMatch -->|命中规则 allow| Allow["直接执行"]
+    RuleMatch -->|命中规则 deny| Deny["拒绝执行"]
+    RuleMatch -->|无匹配规则| AutoMode{"auto 模式?"}
 
-    AutoMode -->|是| AIClassifier[bashClassifier.ts\nAI 语义分类器]
-    AutoMode -->|否| AskUser[弹出确认框\n等待用户决策]
+    AutoMode -->|是| AIClassifier["bashClassifier.ts<br/>AI 语义分类器"]
+    AutoMode -->|否| AskUser["弹出确认框<br/>等待用户决策"]
 
     AIClassifier -->|安全| Allow
     AIClassifier -->|不确定/危险| AskUser
@@ -438,8 +438,8 @@ flowchart TD
     AskUser -->|用户批准| Allow
     AskUser -->|用户拒绝| Deny
 
-    Allow --> ExecBash[执行命令\n超 15s 自动后台化]
-    Deny --> ErrorResult[返回拒绝信息]
+    Allow --> ExecBash["执行命令<br/>超 15s 自动后台化"]
+    Deny --> ErrorResult["返回拒绝信息"]
 
     style Allow fill:#eafaf1,stroke:#27ae60
     style Deny fill:#fdedec,stroke:#e74c3c
@@ -552,48 +552,45 @@ isolation: z.enum(['worktree', 'remote']).optional()
 sequenceDiagram
     participant P as 父 Agent
     participant AT as AgentTool
-    participant R as runAgent()
+    participant R as runAgent
     participant SA as 子 Agent
-    participant FS as 文件系统 / Git
+    participant FS as 文件系统 Git
 
-    P->>AT: call({ prompt, tools, isolation?, run_in_background? })
+    P->>AT: call prompt tools isolation run_in_background
 
-    AT->>AT: assembleToolPool()\n过滤 ALL_AGENT_DISALLOWED_TOOLS
+    AT->>AT: assembleToolPool 过滤 ALL_AGENT_DISALLOWED_TOOLS
 
-    alt isolation = "worktree"
+    alt isolation worktree
         AT->>FS: 创建独立 git worktree
         FS-->>AT: worktree 路径
     end
 
-    alt run_in_background = true
-        AT-->>P: 立即返回 { agentId }\n父 Agent 继续工作
+    alt run_in_background true
+        AT-->>P: 立即返回 agentId 父 Agent 继续工作
         AT->>R: 异步启动子 Agent
     else 同步执行
-        AT->>R: 启动子 Agent（阻塞）
+        AT->>R: 启动子 Agent 阻塞
     end
 
-    R->>SA: 初始化 QueryEngine\n注入工具池 + 上下文
+    R->>SA: 初始化 QueryEngine 注入工具池和上下文
 
     loop Agent 执行循环
         SA->>SA: 调用 LLM
         SA->>SA: 执行工具调用
     end
 
-    SA-->>R: 执行完成 / 出错
+    SA-->>R: 执行完成或出错
 
-    alt isolation = "worktree"
+    alt isolation worktree
         R->>FS: 清理 worktree
     end
 
-    alt run_in_background = true
-        R->>P: 通知系统推送结果\n{ agentId, result }
+    alt run_in_background true
+        R->>P: 通知系统推送结果 agentId result
     else 同步执行
         R-->>AT: SubAgentResult
-        AT-->>P: tool_result { output }
+        AT-->>P: tool_result output
     end
-
-    style SA fill:#e8f4fd,stroke:#1a73e8
-    style FS fill:#eafaf1,stroke:#27ae60
 ```
 
 ---

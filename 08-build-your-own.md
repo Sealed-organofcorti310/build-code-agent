@@ -1119,44 +1119,44 @@ export class AgentLoop {
 sequenceDiagram
     participant User as 用户
     participant CLI as CLI REPL
-    participant Loop as AgentLoop
+    participant AL as AgentLoop
     participant Ctx as ContextManager
     participant API as Claude API
     participant Tools as ToolSystem
 
     User->>CLI: 输入任务
-    CLI->>Loop: run(userMessage, onDelta)
+    CLI->>AL: run userMessage onDelta
 
-    Loop->>Ctx: addUserMessage(text)
-    Ctx-->>Loop: 当前消息历史
+    AL->>Ctx: addUserMessage text
+    Ctx-->>AL: 当前消息历史
 
     loop Agent 主循环
-        Loop->>API: messages.create(messages, tools)
-        API-->>Loop: 流式响应
+        AL->>API: messages.create messages tools
+        API-->>AL: 流式响应
 
-        alt stop_reason = "end_turn"
-            Loop->>CLI: 输出最终文本
-            Loop-->>CLI: 循环结束
-        else stop_reason = "tool_use"
-            Loop->>CLI: 输出思考文本（流式）
+        alt stop_reason end_turn
+            AL->>CLI: 输出最终文本
+            AL-->>CLI: 循环结束
+        else stop_reason tool_use
+            AL->>CLI: 输出思考文本 流式
 
             loop 每个 tool_use block
-                Loop->>Tools: checkPermission(tool, input)
-                Tools-->>Loop: allow / deny
+                AL->>Tools: checkPermission tool input
+                Tools-->>AL: allow deny
 
                 alt allow
-                    Loop->>Tools: executeTool(name, input)
-                    Tools-->>Loop: 结果字符串
-                    Loop->>CLI: 显示 [工具调用] + [工具结果]
+                    AL->>Tools: executeTool name input
+                    Tools-->>AL: 结果字符串
+                    AL->>CLI: 显示工具调用和工具结果
                 else deny
-                    Loop->>Ctx: 添加拒绝消息
+                    AL->>Ctx: 添加拒绝消息
                 end
             end
 
-            Loop->>Ctx: addAssistantMessage(tool_use blocks)
-            Loop->>Ctx: addUserMessage(tool_result blocks)
+            AL->>Ctx: addAssistantMessage tool_use blocks
+            AL->>Ctx: addUserMessage tool_result blocks
 
-            Note over Ctx: 检查是否需要压缩\n（丢弃旧 tool_result）
+            Note over Ctx: 检查是否需要压缩 丢弃旧 tool_result
         end
     end
 ```

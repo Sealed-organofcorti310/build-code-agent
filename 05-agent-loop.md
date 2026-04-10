@@ -376,28 +376,28 @@ for (const result of streamingToolExecutor.getCompletedResults()) {
 
 ```mermaid
 graph TD
-    ADD["addTool(block)\n加入执行队列"] --> PQ["processQueue()\n尝试调度"]
+    ADD["addTool(block)<br/>加入执行队列"] --> PQ["processQueue()<br/>尝试调度"]
     PQ --> CHECK{"canExecuteTool()?"}
-    CHECK --> |"无正在执行的工具"| RUN["立即执行"]
-    CHECK --> |"当前全是并发安全工具\n且新工具也是并发安全"| RUN
-    CHECK --> |"当前有非并发安全工具\n或新工具非并发安全"| WAIT["等待队列，status=queued"]
+    CHECK -->|"无正在执行的工具"| RUN["立即执行"]
+    CHECK -->|"当前全是并发安全工具<br/>且新工具也是并发安全"| RUN
+    CHECK -->|"当前有非并发安全工具<br/>或新工具非并发安全"| WAIT["等待队列，status=queued"]
 
-    subgraph 并发安全工具（只读）
+    subgraph Safe["并发安全工具 只读"]
         RT1["ReadFile #1"]
         RT2["ReadFile #2"]
         RT3["SearchCode #3"]
         RT1 & RT2 & RT3 --> PARALLEL["同时执行"]
     end
 
-    subgraph 非并发安全工具（写操作）
+    subgraph Unsafe["非并发安全工具 写操作"]
         WT1["BashCmd #4"] --> WT2["WriteFile #5"]
         WT2 --> WT3["BashCmd #6"]
         WT1 & WT2 & WT3 --> SERIAL["严格串行"]
     end
 
-    RUN --> COMPLETE["完成 → status=completed\n有序放入结果队列"]
-    COMPLETE --> GCR["getCompletedResults()\n按添加顺序返回结果"]
-    WAIT --> |"前序工具完成后重新调度"| PQ
+    RUN --> COMPLETE["完成 status=completed<br/>有序放入结果队列"]
+    COMPLETE --> GCR["getCompletedResults()<br/>按添加顺序返回结果"]
+    WAIT -->|"前序工具完成后重新调度"| PQ
 ```
 
 ---

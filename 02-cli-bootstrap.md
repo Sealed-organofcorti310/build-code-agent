@@ -580,18 +580,18 @@ main().catch(err => {
 
 ```mermaid
 graph TD
-    A["my-agent-cli.ts 入口"] --> B["顶层副作用\nvoid prefetchApiKey()"]
-    A --> C{args[0] == --version?}
-    C -->|是| D["输出版本号，return\n零模块加载"]
-    C -->|否| E["new Command()\nCommander.js 注册参数"]
+    A["my-agent-cli.ts 入口"] --> B["顶层副作用<br/>void prefetchApiKey()"]
+    A --> C{"args[0] == --version?"}
+    C -->|是| D["输出版本号，return<br/>零模块加载"]
+    C -->|否| E["new Command()<br/>Commander.js 注册参数"]
     E --> F[".action() 回调触发"]
-    F --> G["判断 isInteractive\n!options.print && isTTY"]
+    F --> G["判断 isInteractive<br/>!options.print && isTTY"]
     G --> H["initializeState(cwd, model, ...)"]
     H --> I["await setup(cwd)"]
-    I --> J{isInteractive?}
-    J -->|是| K["launchRepl()\nInk + React TUI"]
-    J -->|否| L["runHeadless(prompt)\n单次执行"]
-    L --> M["outputResult(result, format)\ntext / json 输出，退出"]
+    I --> J{"isInteractive?"}
+    J -->|是| K["launchRepl()<br/>Ink + React TUI"]
+    J -->|否| L["runHeadless(prompt)<br/>单次执行"]
+    L --> M["outputResult(result, format)<br/>text / json 输出，退出"]
 ```
 
 ---

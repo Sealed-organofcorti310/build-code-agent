@@ -763,7 +763,7 @@ mindmap
   root((对话与上下文管理))
     三层上下文
       System Prompt
-        工具描述 prompt()
+        工具描述 prompt
         Git 状态快照
         环境信息
       User Context
@@ -775,7 +775,7 @@ mindmap
         tool_use + tool_result 强制配对
         mutableMessages 跨轮持久化
     系统提示构建
-      fetchSystemPromptParts()
+      fetchSystemPromptParts
       Promise.all 并行加载
       Prompt Cache 友好设计
     上下文窗口管理
