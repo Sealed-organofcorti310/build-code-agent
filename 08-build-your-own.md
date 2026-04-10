@@ -897,7 +897,12 @@ export class AgentLoop {
     options: { model?: string } = {}
   ) {
     this.client = new Anthropic();
-    this.model = options.model ?? "claude-opus-4-5";
+    this.model = options.model ?? "claude-sonnet-4-6";
+  }
+
+  /** 重置对话历史（委托给 ContextManager） */
+  reset(): void {
+    this.context.reset();
   }
 
   /**
@@ -989,7 +994,7 @@ export class AgentLoop {
     // 使用流式 API
     const stream = await this.client.messages.stream({
       model: this.model,
-      max_tokens: 8096,
+      max_tokens: 8192,
       system: systemPrompt,
       tools: this.registry.toAPIFormat(),
       // Anthropic SDK 期望的消息格式
@@ -1181,8 +1186,8 @@ import type { AgentLoop } from "./AgentLoop.js";
 export class CLI {
   private rl: readline.Interface;
 
-  constructor(private agent: AgentLoop) {
-    this.rl = readline.createInterface({
+  constructor(private agent: AgentLoop, rl?: readline.Interface) {
+    this.rl = rl ?? readline.createInterface({
       input: process.stdin,
       output: process.stdout,
       terminal: true,
@@ -1250,8 +1255,7 @@ export class CLI {
         break;
 
       case "/reset":
-        // AgentLoop 持有 ContextManager 的引用，需要暴露 reset 方法
-        // 这里通过事件或直接调用实现
+        this.agent.reset();
         console.log("[会话已重置]");
         break;
 
@@ -1304,8 +1308,8 @@ async function main() {
     compactionThreshold: 40,
   });
 
-  // 3. 创建 CLI（先创建，因为 PermissionChecker 需要它的 readline 实例）
-  // 这里用一个临时的 readline 接口，CLI 启动时会接管
+  // 3. 创建共享的 readline 接口（PermissionChecker 和 CLI 共用同一个实例，
+  // 避免两个 readline 实例同时竞争 stdin）
   const { createInterface } = await import("node:readline");
   const rl = createInterface({ input: process.stdin, output: process.stdout });
 
@@ -1318,7 +1322,7 @@ async function main() {
   const permissions = new PermissionChecker(permMode, rl);
 
   // 5. 读取模型配置
-  const model = process.env["MINI_AGENT_MODEL"] ?? "claude-opus-4-5";
+  const model = process.env["MINI_AGENT_MODEL"] ?? "claude-sonnet-4-6";
 
   // 6. 创建 agent loop
   const agent = new AgentLoop(context, registry, permissions, { model });
@@ -1331,7 +1335,8 @@ async function main() {
 ╚════════════════════════════════════╝
   `);
 
-  const cli = new CLI(agent);
+  // 7. 启动 CLI（传入共享的 rl，避免重复创建 readline 实例）
+  const cli = new CLI(agent, rl);
 
   // 处理 Ctrl+C
   process.on("SIGINT", () => {
@@ -1683,7 +1688,7 @@ flowchart TD
         BuildResult["构建 tool_result\n写回消息历史"]
     end
 
-    CallAPI <-->|"流式 SSE"| ClaudeAPI["Claude API\nclaude-3-7-sonnet"]
+    CallAPI <-->|"流式 SSE"| ClaudeAPI["Claude API\nclaude-sonnet-4-6"]
 
     ParseResp -->|"stop_reason=end_turn"| FinalOutput["最终回答\n输出给用户"]
     ParseResp -->|"stop_reason=tool_use"| PermChk
